@@ -109,11 +109,16 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <script>
-        function toSubmit(e) {
-            e.preventDefault()
-            window.open('https://ghproxy.954001.xyz/' + document.getElementsByName('q')[0].value);
-            return false
-        }
+      function toSubmit(e) {
+        e.preventDefault();
+        const a = document.createElement('a');
+        a.href = 'https://ghproxy.954001.xyz/' + document.getElementsByName('q')[0].value;
+        a.download = 'DownloadFile';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        return false;
+      }
     </script>
     <title>GitHub 文件加速</title>
 </head>
