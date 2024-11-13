@@ -178,6 +178,13 @@ def proxy(u, allow_redirects=False):
             for chunk in iter_content(r, chunk_size=CHUNK_SIZE):
                 yield chunk
 
+        response = Response(generate(), status=r.status_code)
+        # 移除可能导致问题的头部
+        headers.pop('Transfer-Encoding', None)
+        # 添加头部到响应
+        for key, value in headers.items():
+            response.headers[key] = value
+        
         if 'Location' in r.headers:
             _location = r.headers.get('Location')
             if check_url(_location):
@@ -185,7 +192,7 @@ def proxy(u, allow_redirects=False):
             else:
                 return proxy(_location, True)
 
-        return Response(generate(), headers=headers, status=r.status_code)
+        return response
     except Exception as e:
         headers['content-type'] = 'text/html; charset=UTF-8'
         return Response('server error ' + str(e), status=500, headers=headers)
